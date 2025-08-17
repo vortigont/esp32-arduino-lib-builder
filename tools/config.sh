@@ -26,7 +26,19 @@ if [ -z $IDF_TARGET ]; then
 fi
 
 # Owner of the target ESP32 Arduino repository
-AR_USER="tasmota"
+if [ -z $AR_USER ]; then
+    AR_USER="tasmota"
+fi
+
+# Owner of the target IDF repository
+if [ -z $IDF_USER ]; then
+    IDF_USER=$AR_USER
+fi
+
+# Owner of the target ESP32 Arduino repository
+if [ -z $AR_LIBS_USER ]; then
+    AR_LIBS_USER=$AR_USER
+fi
 
 # IDF commit to use
 #IDF_COMMIT=""
@@ -36,8 +48,8 @@ AR_USER="tasmota"
 
 # The full name of the repository
 AR_REPO="$AR_USER/arduino-esp32"
-IDF_REPO="$AR_USER/esp-idf"
-AR_LIBS_REPO="$AR_USER/esp32-arduino-libs"
+IDF_REPO="$IDF_USER/esp-idf"
+AR_LIBS_REPO="$AR_LIBS_USER/esp32-arduino-libs"
 
 AR_REPO_URL="https://github.com/$AR_REPO.git"
 IDF_REPO_URL="https://github.com/$IDF_REPO.git"
