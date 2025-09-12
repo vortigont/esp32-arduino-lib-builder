@@ -84,6 +84,7 @@ extern "C" {
 #endif
 #define CFG_TUSB_RHPORT0_MODE       OPT_MODE_DEVICE
 #define CFG_TUSB_OS                 OPT_OS_FREERTOS
+#define BOARD_TUD_RHPORT			0
 
 /* USB DMA on some MCUs can only access a specific SRAM region with restriction on alignment.
  * Tinyusb use follows macros to declare transferring memory so that they can be put
@@ -97,7 +98,11 @@ extern "C" {
 #endif
 
 #ifndef CFG_TUSB_MEM_ALIGN
+#if CONFIG_IDF_TARGET_ESP32P4
+#   define CFG_TUSB_MEM_ALIGN       TU_ATTR_ALIGNED(64)
+#else
 #   define CFG_TUSB_MEM_ALIGN       TU_ATTR_ALIGNED(4)
+#endif
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32P4
@@ -106,8 +111,10 @@ extern "C" {
 #define CFG_TUD_MAX_SPEED OPT_MODE_FULL_SPEED
 #endif
 
+#define BOARD_TUD_MAX_SPEED			CFG_TUD_MAX_SPEED
+
 /*                      */
-/* DRIVER CONFIGURATION */
+/* DEVICE CONFIGURATION */
 /*                      */
 
 #define CFG_TUD_MAINTASK_SIZE 		4096
@@ -154,6 +161,14 @@ extern "C" {
 // VENDOR FIFO size of TX and RX
 #define CFG_TUD_VENDOR_RX_BUFSIZE 	CONFIG_TINYUSB_VENDOR_RX_BUFSIZE
 #define CFG_TUD_VENDOR_TX_BUFSIZE 	CONFIG_TINYUSB_VENDOR_TX_BUFSIZE
+
+//------------- HID -------------//
+#define CFG_TUH_HID_EPIN_BUFSIZE    64
+#define CFG_TUH_HID_EPOUT_BUFSIZE   64
+
+//------------- CDC -------------//
+#define CFG_TUH_CDC_LINE_CONTROL_ON_ENUM    0x03
+#define CFG_TUH_CDC_LINE_CODING_ON_ENUM   { 115200, CDC_LINE_CODING_STOP_BITS_1, CDC_LINE_CODING_PARITY_NONE, 8 }
 
 #ifdef __cplusplus
 }
